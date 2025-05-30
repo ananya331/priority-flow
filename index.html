@@ -1,69 +1,43 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Smart Traffic System – PriorityFlow</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Traffic Signal Control – Kolkata</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>🚦 PriorityFlow: Smart Traffic System</h1>
-    <p class="description">A real-time emergency traffic management simulation using smart detection and lane prioritization.</p>
-  </header>
+  <h1>Smart Traffic Signal Control – Kolkata</h1>
 
-  <main>
-    <div class="emergency-banner" id="emergencyBanner" role="alert" aria-live="assertive">
-      🚨 Emergency Detected – Prioritizing Lane...
+  <div id="controls">
+    <button onclick="startNormalCycle()">Normal Cycle</button>
+    <button onclick="simulateEmergency('north')">Emergency North</button>
+    <button onclick="simulateEmergency('south')">Emergency South</button>
+    <button onclick="simulateEmergency('east')">Emergency East</button>
+    <button onclick="simulateEmergency('west')">Emergency West</button>
+    <button onclick="simulateAIPriority()">AI-Based Priority</button>
+  </div>
+
+  <div id="emergencyBanner">Emergency Vehicle Approaching – Lane Cleared!</div>
+
+  <div id="trafficLights">
+    <div class="lane-box" id="lane-north">North
+      <div class="traffic-light" id="light-north"></div>
     </div>
+    <div class="lane-box" id="lane-south">South
+      <div class="traffic-light" id="light-south"></div>
+    </div>
+    <div class="lane-box" id="lane-east">East
+      <div class="traffic-light" id="light-east"></div>
+    </div>
+    <div class="lane-box" id="lane-west">West
+      <div class="traffic-light" id="light-west"></div>
+    </div>
+  </div>
 
-    <section class="intersection" aria-label="Traffic Intersection Simulation">
-      <div class="lane north" id="lane-north">
-        <div class="light" id="light-north" aria-label="North light"></div>
-        <p>North</p>
-      </div>
-      <div class="lane south" id="lane-south">
-        <div class="light" id="light-south" aria-label="South light"></div>
-        <p>South</p>
-      </div>
-      <div class="lane east" id="lane-east">
-        <div class="light" id="light-east" aria-label="East light"></div>
-        <p>East</p>
-      </div>
-      <div class="lane west" id="lane-west">
-        <div class="light" id="light-west" aria-label="West light"></div>
-        <p>West</p>
-      </div>
-    </section>
-
-    <section class="controls">
-      <h2>🚑 Emergency Vehicle Detection</h2>
-      <div class="buttons">
-        <button onclick="simulateEmergency('north')">From North</button>
-        <button onclick="simulateEmergency('south')">From South</button>
-        <button onclick="simulateEmergency('east')">From East</button>
-        <button onclick="simulateEmergency('west')">From West</button>
-        <button class="resume" onclick="startNormalCycle()">Resume Normal Traffic</button>
-        <button onclick="simulateAIPriority()">AI-Based Priority</button>
-      </div>
-    </section>
-
-    <div id="map" style="height: 400px; margin-top: 40px;"></div>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 PriorityFlow Traffic Tech | Demo Simulation</p>
-  </footer>
-
-  <audio id="siren-sound" src="siren.mp3" preload="auto"></audio>
-  <audio id="voice-north" src="priority-north.mp3" preload="auto"></audio>
-  <audio id="voice-south" src="priority-south.mp3" preload="auto"></audio>
-  <audio id="voice-east" src="priority-east.mp3" preload="auto"></audio>
-  <audio id="voice-west" src="priority-west.mp3" preload="auto"></audio>
-
-  <script src="script.js"></script>
+  <div id="map"></div>
 </body>
 </html>
