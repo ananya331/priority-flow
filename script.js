@@ -14,7 +14,7 @@ window.onload = () => {
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  // Live traffic tile layer
+  // Live traffic tile layer (optional)
   L.tileLayer('https://{s}.tile.opentrafficmap.xyz/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenTrafficMap contributors'
   }).addTo(map);
