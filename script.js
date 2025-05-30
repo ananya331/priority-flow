@@ -1,4 +1,3 @@
-
 const lanes = ["north", "south", "east", "west"];
 let currentIndex = 0;
 let intervalId = null;
@@ -8,10 +7,16 @@ let emergencyMarker;
 window.onload = () => {
   startNormalCycle();
 
-  map = L.map('map').setView([28.6139, 77.2090], 13); // Default view
+  map = L.map('map').setView([22.5726, 88.3639], 13); // Kolkata
 
+  // Base tile layer
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Live traffic tile layer
+  L.tileLayer('https://{s}.tile.opentrafficmap.xyz/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenTrafficMap contributors'
   }).addTo(map);
 };
 
@@ -19,7 +24,6 @@ function setLight(activeLane) {
   lanes.forEach(lane => {
     const light = document.getElementById(`light-${lane}`);
     const laneBox = document.getElementById(`lane-${lane}`);
-
     if (lane === activeLane) {
       light.classList.add("green");
       light.classList.remove("red");
@@ -47,25 +51,28 @@ function simulateEmergency(lane) {
   clearInterval(intervalId);
   document.getElementById("emergencyBanner").style.display = "block";
   setLight(lane);
+}
 
-  document.getElementById("siren-sound")?.play();
-  document.getElementById(`voice-${lane}`)?.play();
+// --- AI-Based Routing Logic ---
 
-  const coords = {
-    north: [28.625, 77.209],
-    south: [28.602, 77.209],
-    east: [28.6139, 77.222],
-    west: [28.6139, 77.195]
+function generateTrafficData() {
+  return {
+    north: Math.random(),
+    south: Math.random(),
+    east: Math.random(),
+    west: Math.random()
   };
+}
 
-  if (map) {
-    if (emergencyMarker) map.removeLayer(emergencyMarker);
-    emergencyMarker = L.marker(coords[lane]).addTo(map)
-      .bindPopup(`🚨 Emergency at ${lane.toUpperCase()} lane`).openPopup();
-    map.setView(coords[lane], 15);
-  }
+function getBestLane(traffic) {
+  return Object.keys(traffic).reduce((best, lane) =>
+    traffic[lane] < traffic[best] ? lane : best
+  );
+}
 
-  const logs = JSON.parse(localStorage.getItem("emergencyLogs")) || [];
-  logs.push({ direction: lane, timestamp: new Date().toISOString() });
-  localStorage.setItem("emergencyLogs", JSON.stringify(logs));
+function simulateAIPriority() {
+  const trafficData = generateTrafficData();
+  const bestLane = getBestLane(trafficData);
+  console.log("AI Selected Lane:", bestLane, trafficData);
+  simulateEmergency(bestLane);
 }
